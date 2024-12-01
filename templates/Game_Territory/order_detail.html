@@ -1,0 +1,7 @@
+<!-- templates/store/order_detail.html -->
+<h2>Детали заказа</h2>
+<p>Статус: {{ order.get_status_display }}</p>
+<p>Оплата: {% if order.is_paid %}Оплачено{% else %}Не оплачено{% endif %}</p>
+{% if not order.is_paid %}
+    <a href="{% url 'store:process_payment' order.id %}">Оплатить</a>
+{% endif %}

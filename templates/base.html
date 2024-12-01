@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Территория игр</title>
+    <!-- Подключение Bootstrap CSS и дополнительные стили -->
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'Game_Territory/css/style.css' %}">
+</head>
+<body>
+
+<!-- Верхний баннер с контактной информацией и кнопками входа -->
+<div class="top-banner bg-dark text-white py-2">
+    <div class="container d-flex justify-content-between align-items-center">
+        <span><i class="fas fa-map-marker-alt"></i></span>
+        <div>
+            {% if user.is_authenticated %}
+                <a href="{% url 'Game_Territory:profile' %}" class="text-white mr-3">Мой кабинет</a>
+                <form action="{% url 'Game_Territory:logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-link text-white p-0">Выход</button>
+                </form>
+            {% else %}
+                <a href="{% url 'Game_Territory:login' %}" class="text-white mr-3">Вход</a>
+                <a href="{% url 'Game_Territory:register' %}" class="text-white">Регистрация</a>
+            {% endif %}
+            <span class="ml-3"><i class="fas fa-phone"></i> +7 495 540-43-46</span>
+        </div>
+    </div>
+</div>
+
+<!-- Навигационная панель с логотипом и названием магазина -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'Game_Territory:home' %}">
+            <img src="{% static 'Game_Territory/images/logo.png' %}" alt="Logo">
+            <span class="store-name">Game Territory</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <!-- Основное меню -->
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item"><a class="nav-link" href="{% url 'Game_Territory:product_list' %}">Каталог</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Настольные игры</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Варгеймы</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Warhammer</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Infinity</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Хиты</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Предзаказы</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Скидки</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Основной контент -->
+<div class="container my-4">
+    {% block content %}{% endblock %}
+</div>
+
+<!-- Footer -->
+<footer class="footer bg-light text-center p-4">
+    <div class="container">
+        <p>&copy; 2024 Территория игр</p>
+    </div>
+</footer>
+
+<!-- Подключение Bootstrap JS и jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<!-- templates/store/order_history.html -->
+<h2>История заказов</h2>
+<ul>
+    {% for order in orders %}
+        <li>
+            Заказ №{{ order.id }} - {{ order.created_at }} - Статус: {{ order.get_status_display }}
+            <ul>
+                {% for product in order.products.all %}
+                    <li>{{ product.name }}</li>
+                {% endfor %}
+            </ul>
+        </li>
+    {% endfor %}
+</ul>

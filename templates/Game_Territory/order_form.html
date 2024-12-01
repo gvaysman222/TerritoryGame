@@ -1,0 +1,13 @@
+<!-- templates/store/order_form.html -->
+<h2>Оформление заказа</h2>
+<p>Ваши товары:</p>
+<ul>
+    {% for item in request.user.cart.items.all %}
+        <li>{{ item.product.name }} - {{ item.quantity }} шт.</li>
+    {% endfor %}
+</ul>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Оформить заказ</button>
+</form>

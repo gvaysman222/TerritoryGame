@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Личный кабинет</h2>
+
+    <!-- Отображение информации о пользователе -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Информация о пользователе</h5>
+            <p>Имя: {{ request.user.first_name }}</p>
+            <p>Фамилия: {{ request.user.last_name }}</p>
+            <p>Email: {{ request.user.email }}</p>
+        </div>
+    </div>
+
+    <!-- Форма для редактирования профиля -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Редактировать профиль</h5>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ profile_form.as_p }}
+                <h6>Аватар</h6>
+                {% if request.user.userprofile.avatar %}
+                    <img src="{{ request.user.userprofile.avatar.url }}" alt="Аватар" class="img-thumbnail mb-2" style="max-width: 150px;">
+                {% else %}
+                    <p>Аватар не установлен.</p>
+                {% endif %}
+                {{ avatar_form.as_p }}
+                <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Раздел для администратора и менеджера -->
+    {% if is_admin %}
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Функции администратора</h5>
+                <p>Вы можете управлять пользователями, товарами и заказами.</p>
+                <a href="{% url 'Game_Territory:user_management' %}" class="btn btn-secondary">Управление пользователями</a>
+                <a href="{% url 'Game_Territory:manage_products' %}" class="btn btn-secondary">Управление товарами</a>
+                <a href="{% url 'Game_Territory:order_management' %}" class="btn btn-secondary">Управление заказами</a>
+            </div>
+        </div>
+    {% elif is_manager %}
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Функции менеджера</h5>
+                <p>Вы можете управлять заказами и товарами.</p>
+                <a href="{% url 'Game_Territory:product_list' %}" class="btn btn-secondary">Управление товарами</a>
+                <a href="{% url 'Game_Territory:order_management' %}" class="btn btn-secondary">Управление заказами</a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+<!-- templates/store/manage_orders.html -->
+<h2>Управление заказами</h2>
+<form method="get">
+    <label for="status">Фильтр по статусу:</label>
+    <select name="status" id="status">
+        <option value="">Все</option>
+        <option value="pending" {% if status == 'pending' %}selected{% endif %}>Ожидается</option>
+        <option value="processed" {% if status == 'processed' %}selected{% endif %}>Обработан</option>
+        <option value="shipped" {% if status == 'shipped' %}selected{% endif %}>Отправлен</option>
+        <option value="delivered" {% if status == 'delivered' %}selected{% endif %}>Доставлен</option>
+    </select>
+    <button type="submit">Фильтровать</button>
+</form>
+<ul>
+    {% for order in orders %}
+        <li>Заказ №{{ order.id }} - {{ order.get_status_display }} - {{ order.created_at }}</li>
+    {% endfor %}
+</ul>

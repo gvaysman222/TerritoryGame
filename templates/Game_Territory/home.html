@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Основные категории товаров -->
+    <h2>Категории</h2>
+    <div class="row my-4">
+        <div class="col-md-4">
+            <a href="{% url 'Game_Territory:board_games' %}">
+                <div class="card">
+                    <img src="{% static 'Game_Territory/images/category_boardgames.jpg' %}" class="card-img-top" alt="Настольные игры">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Настольные игры</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'Game_Territory:wargames' %}">
+                <div class="card">
+                    <img src="{% static 'Game_Territory/images/category_wargames.jpg' %}" class="card-img-top" alt="Варгеймы">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Варгеймы</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'Game_Territory:infinity' %}">
+                <div class="card">
+                    <img src="{% static 'Game_Territory/images/category_infinity.jpg' %}" class="card-img-top" alt="Infinity">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Infinity</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
