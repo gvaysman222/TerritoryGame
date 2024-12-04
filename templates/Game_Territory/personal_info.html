@@ -1,0 +1,42 @@
+{% extends "Game_Territory/profile.html" %}
+
+{% block cabinet_content %}
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">Личная информация</h5>
+            <p>Имя: {{ request.user.first_name }}</p>
+            <p>Фамилия: {{ request.user.last_name }}</p>
+            <p>Email: {{ request.user.email }}</p>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="profile_form" value="true">
+            <div class="mb-3">
+                <label for="id_first_name" class="form-label">Имя</label>
+                <input type="text" name="first_name" id="id_first_name" class="form-control" value="{{ request.user.first_name }}">
+            </div>
+            <div class="mb-3">
+                <label for="id_last_name" class="form-label">Фамилия</label>
+                <input type="text" name="last_name" id="id_last_name" class="form-control" value="{{ request.user.last_name }}">
+            </div>
+            <div class="mb-3">
+                <label for="id_email" class="form-label">Email</label>
+                <input type="email" name="email" id="id_email" class="form-control" value="{{ request.user.email }}">
+            </div>
+            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+        </form>
+    </div>
+</div>
+
+<!-- Форма смены пароля -->
+<div class="card mt-4">
+    <div class="card-body">
+        <h5 class="card-title">Сменить пароль</h5>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="password_form" value="true">
+            {{ password_form.as_p }}
+            <button type="submit" class="btn btn-primary">Сменить пароль</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

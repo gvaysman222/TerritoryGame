@@ -9,30 +9,23 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    height: 100%;
+    width: 100%;
 }
 
-.top-banner {
-    background-color: rgba(0, 0, 0, 0.8); /* Полупрозрачный чёрный фон */
-    color: #000000; /* Белый текст */
-    border: none; /* Убираем рамки */
-    box-shadow: none; /* Убираем тени */
-    padding: 10px 0; /* Отступы сверху и снизу */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden; /* Убираем горизонтальный скролл */
+    overflow-y: auto; /* Гарантируем вертикальную прокрутку */
 }
 
-.top-banner span {
-    font-size: 0.9em; /* Размер текста для телефона */
-    color: #000000; /* Светлый текст */
-}
-
-.top-banner a {
-    color: #000000; /* Белый цвет ссылок */
-    font-size: 0.9em; /* Размер текста для ссылок */
-    text-decoration: none; /* Убираем подчёркивание */
-    transition: color 0.3s ease; /* Плавный переход цвета */
-}
-
-.top-banner a:hover {
-    color: #ff6600; /* Оранжевый цвет при наведении */
+.navbar {
+    margin-bottom: 0; /* Убираем отступ снизу у навигационной панели */
+    padding-bottom: 0; /* Убираем отступ снизу */
+    border-radius: 10px 10px 0 0; /* Убираем закругление снизу */
 }
 
 .btn-link {
@@ -46,13 +39,14 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 100%;
     margin: 0 auto; /* Убираем отступ сверху и снизу */
     padding: 20px;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(165, 157, 157, 0.7);
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(10px);
+    border-radius: 0 0 0px 0px; /* Убираем закругление сверху */
 }
 
 /* Дополнительные стили для текста внутри блока */
@@ -71,31 +65,50 @@ body {
 }
 
 .container a {
-    color: #ff6600; /* Оранжевый цвет ссылок */
+    color: #040100; /* Оранжевый цвет ссылок */
     text-decoration: none; /* Убираем подчёркивание */
     font-weight: bold; /* Жирный текст для ссылок */
 }
 
 .container a:hover {
-    color: #e55d00; /* Более тёмный оранжевый при наведении */
-    text-decoration: underline; /* Подчёркивание при наведении */
+    color: #000000; /* Более тёмный оранжевый при наведении */
+    text-decoration: none; /* Подчёркивание при наведении */
+}
+
+.row {
+
+    gap: 1px; /* Расстояние между карточками */
+}
+
+.products-container {
+    display: flex;
+    flex-wrap: wrap; /* Позволяет переносить карточки на новую строку */
+    gap: 20px; /* Расстояние между карточками */
+    justify-content: center; /* Центрирование карточек */
 }
 
 /* Карточки продуктов */
 .product-card {
-    background-color: rgba(255, 255, 255, 0.9); /* Полупрозрачный белый фон */
-    border-radius: 10px; /* Округлые углы */
-    overflow: hidden; /* Убираем выход за рамки */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Лёгкая тень */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Плавные переходы */
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     text-align: center;
-    padding: 15px; /* Внутренние отступы */
+    padding: 30px;
+    width: calc(25% - 20px); /* Каждая карточка занимает 1/4 ширины */
+    max-width: 300px; /* Ограничение ширины карточки */
+    box-sizing: border-box; /* Учитываем padding и margin */
 }
 
 /* Анимация при наведении на карточку */
 .product-card:hover {
     transform: translateY(-5px); /* Поднимаем карточку */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Увеличиваем тень */
+}
+
+.products-container > .product-card:nth-child(n+5) {
+    display: none; /* Скрываем карточки после 4-й */
 }
 
 /* Изображения в карточках */
@@ -127,7 +140,7 @@ body {
 
 /* Кнопка в карточке */
 .product-card .btn {
-    background-color: #ff6600; /* Оранжевый цвет кнопки */
+    background-color: #6e626a; /* Оранжевый цвет кнопки */
     border: none; /* Убираем рамки */
     color: white;
     padding: 10px 20px;
@@ -137,7 +150,7 @@ body {
 }
 
 .product-card .btn:hover {
-    background-color: #e55d00; /* Более тёмный оранжевый при наведении */
+    background-color: #d5bcac; /* Более тёмный оранжевый при наведении */
 }
 
 .transparent-container {
@@ -179,3 +192,315 @@ body {
     color: #ff6600; /* Цвет при наведении */
 }
 
+/* Уникальные стили для навигационной панели */
+.custom-navbar {
+    width: 100vw; /* Занимает всю ширину экрана */
+    margin: 0; /* Убираем внешние отступы */
+    padding: 10px 0; /* Устанавливаем внутренние отступы */
+    background-color: rgba(255, 255, 255); /* Прозрачный фон */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тень */
+    border-radius: 0; /* Убираем закругления */
+    position: fixed; /* Фиксируем позицию наверху */
+    top: 0; /* Располагаем у верхнего края */
+    left: 0; /* Располагаем у левого края */
+    z-index: 1000; /* Устанавливаем приоритет отображения */
+}
+
+
+/* Стили для ссылок в панели */
+.custom-navbar .nav-link {
+    font-size: 1.2em; /* Увеличиваем размер текста ссылок */
+    font-weight: bold; /* Делаем текст немного жирнее */
+    color: #333; /* Основной цвет текста */
+    text-decoration: none; /* Убираем подчёркивание */
+    padding: 0.5rem 1rem; /* Внутренние отступы */
+    transition: color 0.3s ease; /* Плавный переход цвета */
+}
+
+.custom-navbar .nav-link:hover {
+    color: #ff6600; /* Цвет при наведении */
+}
+
+/* Логотип */
+.custom-navbar .navbar-brand img {
+    height: 40px; /* Высота логотипа */
+}
+
+/* Кнопка для мобильной версии */
+.custom-navbar .navbar-toggler {
+    border: none; /* Убираем рамки */
+    background-color: #ff6600; /* Цвет фона */
+    color: white; /* Цвет иконки */
+    border-radius: 5px; /* Закругление кнопки */
+}
+
+.custom-navbar .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba%280, 0, 0, 0.5%29' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+/* Для больших экранов */
+@media (min-width: 992px) {
+    .custom-navbar .navbar-nav {
+        gap: 15px; /* Расстояние между пунктами меню */
+    }
+}
+
+
+.content {
+    flex: 1; /* Контент занимает всю доступную высоту */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Убираем пустое пространство сверху */
+    padding-top: 0; /* Убираем отступ сверху */
+    border-radius: 0 0 10px 10px; /* Убираем закругление сверху */
+    width: 100%;
+    margin-top: 80px; /* Отступ вниз, чтобы контент не перекрывался навигационной панелью */
+    padding-bottom: 0; /* Убираем отступ снизу */
+    margin-bottom: 0; /* Убираем внешние отступы */
+}
+
+.custom-footer {
+    margin-top: 0; /* Убираем отступ сверху */
+    padding-top: 10px; /* Если нужно, добавьте небольшой внутренний отступ */
+    padding-bottom: 10px;
+    background-color: rgba(0, 0, 0, 0.9); /* Полупрозрачный фон футера */
+    text-align: center;
+    color: #555;
+    border-top: 1px solid #ddd;
+}
+
+.custom-navbar .navbar-brand {
+    font-size: 1.5em; /* Увеличиваем размер текста названия */
+    font-weight: bold; /* Делаем текст жирным */
+    display: flex; /* Используем flexbox для выравнивания */
+    align-items: center; /* Центрируем логотип и текст по вертикали */
+}
+
+.custom-navbar .navbar-brand img {
+    height: 60px; /* Увеличиваем размер логотипа */
+    margin-right: 10px; /* Добавляем отступ справа от логотипа */
+}
+
+.store-info {
+    text-align: center; /* Центрирование текста */
+    color: #000; /* Цвет текста - черный */
+    margin: 20px auto; /* Отступы сверху и снизу, центрирование по горизонтали */
+    max-width: 800px; /* Ограничение ширины блока для улучшения читаемости */
+    padding: 20px; /* Внутренние отступы */
+}
+
+.store-info h1 {
+    font-size: 2.5rem; /* Увеличенный размер для заголовка */
+    font-weight: bold; /* Жирный текст для заголовка */
+    margin-bottom: 15px; /* Отступ между заголовком и текстом */
+}
+
+.store-info p {
+    font-size: 1.2rem; /* Размер текста для абзаца */
+    line-height: 1.6; /* Увеличенная высота строки для улучшения читаемости */
+}
+
+
+h2.text-center {
+    font-size: 2rem;
+    color: #000000;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+/* Карточки товаров */
+.card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Расстояние между карточками */
+}
+
+.card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: none;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 10px;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Изображение товара */
+.card img {
+    height: 100px;
+    width: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 15px;
+}
+
+/* Контент карточки */
+.card-body {
+    flex: 1;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.card-text {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.font-weight-bold {
+    color: #ff6600;
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+/* Кнопки */
+.card .btn {
+    background-color: #ff6600;
+    color: white;
+    padding: 5px 10px;
+    font-size: 0.85rem;
+    border-radius: 5px;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.card .btn:hover {
+    background-color: #e55d00;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .card img {
+        margin-bottom: 10px;
+        margin-right: 0;
+    }
+
+    .btn {
+        width: 100%;
+        margin-top: 10px;
+    }
+}
+
+.about-content {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.about-content h1 {
+    font-size: 2rem;
+    color: #222;
+}
+
+.about-content p {
+    margin-bottom: 15px;
+    color: #555;
+}
+
+.sidebar {
+    width: 250px;
+    border-right: 1px solid #ddd;
+}
+
+.sidebar .nav-link {
+    color: #333;
+    padding: 10px 15px;
+    border-radius: 0;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.sidebar .nav-link.active {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #f8f9fa;
+}
+
+.content-section {
+    padding: 20px;
+    width: 100%;
+    min-height: 400px;
+}
+
+/* Стили для бокового меню */
+.list-group {
+    border-radius: 10px; /* Округлые углы */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень */
+    overflow: hidden;
+}
+
+.list-group-item {
+    font-size: 1.1rem;
+    padding: 15px 20px;
+    color: #333;
+    border: none; /* Убираем стандартные границы */
+    transition: background-color 0.3s, color 0.3s;
+    background-color: #f8f9fa; /* Светлый фон */
+}
+
+.list-group-item.active {
+    background-color: #007bff; /* Акцентный цвет */
+    color: #fff; /* Белый текст для активного элемента */
+    font-weight: bold;
+}
+
+.list-group-item:hover {
+    background-color: #e9ecef; /* Светлый серый фон при наведении */
+    color: #000;
+}
+
+/* Стили для основного контента */
+.cabinet-content {
+    flex: 1;
+    background-color: rgba(255, 255, 255, 0.8); /* Полупрозрачный белый фон */
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cabinet-content h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.cabinet-content p {
+    color: #555;
+    line-height: 1.6;
+}
+
+/* Добавляем адаптивность */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .list-group {
+        margin-bottom: 20px; /* Отступ снизу для мобильных устройств */
+    }
+}

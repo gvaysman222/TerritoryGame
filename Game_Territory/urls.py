@@ -55,6 +55,12 @@ urlpatterns = [
     path('cart/remove/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
     path('cart/update/<int:item_id>/', views.update_cart_item, name='update_cart_item'),
     path('checkout/', views.checkout, name='checkout'),
+    path('about/', views.about, name='about'),
+    path('personal_info/', views.personal_info, name='personal_info'),
+    path('my_orders/', views.my_orders, name='my_orders'),
+    path('admin_panel/', views.admin_panel, name='admin_panel'),
+    path("edit_profile/", views.edit_profile, name="edit_profile"),
+    path("change_password/", views.change_password, name="change_password"),
 ]
 
 if settings.DEBUG:

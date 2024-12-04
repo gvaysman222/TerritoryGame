@@ -15,7 +15,7 @@
 <body>
     <!-- Навигационная панель -->
     <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="container">
+        <div class="container-fluid custom-navbar">
             <!-- Логотип -->
             <a class="navbar-brand" href="{% url 'Game_Territory:home' %}">
                 <img src="{% static 'Game_Territory/images/logo.png' %}" alt="Logo" height="40">
@@ -29,6 +29,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item"><a class="nav-link" href="{% url 'Game_Territory:product_list' %}">Каталог</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'Game_Territory:about' %}">О нас</a></li>
                 </ul>
                 <!-- Кнопки входа/выхода -->
                 <ul class="navbar-nav">
@@ -57,14 +58,14 @@
 
     <!-- Основной контент -->
     <div class="content">
-        <div class="container my-4">
+        <div class="container">
             {% block content %}{% endblock %}
         </div>
     </div>
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="container">
+        <div class="custom-footer">
             <p>&copy; 2024 Территория игр</p>
         </div>
     </footer>

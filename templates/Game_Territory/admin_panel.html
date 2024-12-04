@@ -1,0 +1,17 @@
+{% extends "Game_Territory/profile.html" %}
+
+{% block cabinet_content %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Админ панель</h5>
+        <p>Доступные функции:</p>
+        <ul>
+            {% if is_admin %}
+                <li><a href="{% url 'Game_Territory:user_management' %}">Управление пользователями</a></li>
+            {% endif %}
+            <li><a href="{% url 'Game_Territory:manage_products' %}">Управление товарами</a></li>
+            <li><a href="{% url 'Game_Territory:order_management' %}">Управление заказами</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

@@ -15,6 +15,75 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.db.models import Sum
 import random
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+
+@login_required
+def personal_info(request):
+    # Проверяем, является ли пользователь администратором или менеджером
+    is_admin = request.user.is_superuser
+    is_manager = request.user.groups.filter(name='manager').exists()
+
+    # Инициализируем формы
+    password_form = PasswordChangeForm(request.user)
+    profile_form = None
+
+    if request.method == 'POST':
+        # Определяем, какая форма была отправлена
+        if 'password_form' in request.POST:
+            password_form = PasswordChangeForm(request.user, request.POST)
+            if password_form.is_valid():
+                user = password_form.save()
+                update_session_auth_hash(request, user)  # Обновляем сессию
+                messages.success(request, 'Ваш пароль успешно изменён!')
+                return redirect('Game_Territory:personal_info')
+            else:
+                messages.error(request, 'Пожалуйста, исправьте ошибки в форме смены пароля.')
+        elif 'profile_form' in request.POST:
+            # Обновляем имя, фамилию и email
+            first_name = request.POST.get('first_name', '').strip()
+            last_name = request.POST.get('last_name', '').strip()
+            email = request.POST.get('email', '').strip()
+
+            if first_name and last_name and email:
+                request.user.first_name = first_name
+                request.user.last_name = last_name
+                request.user.email = email
+                request.user.save()
+                messages.success(request, 'Личная информация успешно обновлена!')
+                return redirect('Game_Territory:personal_info')
+            else:
+                messages.error(request, 'Пожалуйста, заполните все поля формы.')
+
+    return render(request, 'Game_Territory/personal_info.html', {
+        'password_form': password_form,
+        'is_admin': is_admin,
+        'is_manager': is_manager,
+    })
+
+@login_required
+def my_orders(request):
+    orders = Order.objects.filter(customer=request.user)
+    return render(request, 'Game_Territory/my_orders.html', {'orders': orders, 'active_tab': 'my_orders'})
+
+@login_required
+def admin_panel(request):
+    # Проверяем, является ли пользователь администратором или менеджером
+    is_admin = request.user.is_superuser
+    is_manager = request.user.groups.filter(name='manager').exists()
+
+    if not is_admin and not is_manager:
+        # Если пользователь не администратор и не менеджер, редирект на профиль
+        return redirect('Game_Territory:profile')
+
+    return render(request, 'Game_Territory/admin_panel.html', {
+        'is_admin': is_admin,
+        'is_manager': is_manager,
+        'active_tab': 'admin_panel',  # Активная вкладка
+    })
+
+def about(request):
+    return render(request, 'Game_Territory/about.html')
 
 def register(request):
     if request.method == 'POST':
@@ -276,29 +345,77 @@ def profile(request):
     is_admin = request.user.is_superuser
     is_manager = request.user.groups.filter(name='manager').exists()
 
-    # Проверяем, есть ли профиль у пользователя, если нет — создаём
-    if not hasattr(request.user, 'userprofile'):
-        UserProfile.objects.create(user=request.user)
+    # Инициализируем формы
+    password_form = PasswordChangeForm(request.user)
+    profile_form = None
 
     if request.method == 'POST':
-        profile_form = ProfileForm(request.POST, instance=request.user)
-        avatar_form = AvatarForm(request.POST, request.FILES, instance=request.user.userprofile)
+        # Определяем, какая форма была отправлена
+        if 'password_form' in request.POST:
+            password_form = PasswordChangeForm(request.user, request.POST)
+            if password_form.is_valid():
+                user = password_form.save()
+                update_session_auth_hash(request, user)  # Обновляем сессию
+                messages.success(request, 'Ваш пароль успешно изменён!')
+                return redirect('Game_Territory:personal_info')
+            else:
+                messages.error(request, 'Пожалуйста, исправьте ошибки в форме смены пароля.')
+        elif 'profile_form' in request.POST:
+            # Обновляем имя, фамилию и email
+            first_name = request.POST.get('first_name', '').strip()
+            last_name = request.POST.get('last_name', '').strip()
+            email = request.POST.get('email', '').strip()
 
-        if profile_form.is_valid() and avatar_form.is_valid():
-            profile_form.save()
-            avatar_form.save()
-            messages.success(request, 'Ваш профиль был успешно обновлен!')
-            return redirect('Game_Territory:profile')
-    else:
-        profile_form = ProfileForm(instance=request.user)
-        avatar_form = AvatarForm(instance=request.user.userprofile)
+            if first_name and last_name and email:
+                request.user.first_name = first_name
+                request.user.last_name = last_name
+                request.user.email = email
+                request.user.save()
+                messages.success(request, 'Личная информация успешно обновлена!')
+                return redirect('Game_Territory:personal_info')
+            else:
+                messages.error(request, 'Пожалуйста, заполните все поля формы.')
 
-    return render(request, 'Game_Territory/profile.html', {
-        'profile_form': profile_form,
-        'avatar_form': avatar_form,
+    return render(request, 'Game_Territory/personal_info.html', {
+        'password_form': password_form,
         'is_admin': is_admin,
         'is_manager': is_manager,
     })
+
+@login_required
+def edit_profile(request):
+    if request.method == "POST":
+        first_name = request.POST.get("first_name", "").strip()
+        last_name = request.POST.get("last_name", "").strip()
+        email = request.POST.get("email", "").strip()
+
+        # Обновляем информацию о пользователе
+        request.user.first_name = first_name
+        request.user.last_name = last_name
+        request.user.email = email
+        request.user.save()
+
+        messages.success(request, "Ваш профиль успешно обновлен!")
+        return redirect("Game_Territory:personal_info")
+
+    return redirect("Game_Territory:personal_info")
+
+@login_required
+def change_password(request):
+    if request.method == "POST":
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            # Обновляем сессию, чтобы не разлогинивать пользователя
+            update_session_auth_hash(request, user)
+            messages.success(request, "Пароль успешно изменен!")
+            return redirect("Game_Territory:personal_info")
+        else:
+            messages.error(request, "Пожалуйста, исправьте ошибки ниже.")
+    else:
+        form = PasswordChangeForm(user=request.user)
+
+    return render(request, "Game_Territory/change_password.html", {"form": form})
 
 @user_passes_test(lambda u: u.is_superuser)  # Проверка, является ли пользователь администратором
 def user_management(request):
