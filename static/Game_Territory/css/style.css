@@ -1,103 +1,181 @@
-/* Анимация для карточек категорий при наведении */
-.card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    padding: 15px;
-    text-align: center;
-    max-width: 200px;
-    margin: 10px;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-/* Анимация для логотипа и названия магазина при наведении */
-.navbar-brand {
+body {
+    background-image: url("/static/Game_Territory/images/background.webp");
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
     display: flex;
-    align-items: center;
-    transition: color 0.3s ease;
+    flex-direction: column;
 }
 
-.navbar-brand img {
-    height: 50px; /* Задаем фиксированную высоту логотипа */
-    width: auto; /* Автоматическая ширина, чтобы сохранить пропорции */
-    max-width: 100px; /* Ограничение максимальной ширины */
-    margin-right: 10px; /* Отступ справа */
-    object-fit: contain; /* Убираем растягивание */
+.top-banner {
+    background-color: rgba(0, 0, 0, 0.8); /* Полупрозрачный чёрный фон */
+    color: #000000; /* Белый текст */
+    border: none; /* Убираем рамки */
+    box-shadow: none; /* Убираем тени */
+    padding: 10px 0; /* Отступы сверху и снизу */
 }
 
-.navbar-brand:hover .store-name {
-    color: #007bff;
+.top-banner span {
+    font-size: 0.9em; /* Размер текста для телефона */
+    color: #000000; /* Светлый текст */
 }
 
-/* Анимация кнопок при наведении */
-.btn-primary {
-    background-color: #ff6600;
-    border-color: #ff6600;
+.top-banner a {
+    color: #000000; /* Белый цвет ссылок */
+    font-size: 0.9em; /* Размер текста для ссылок */
+    text-decoration: none; /* Убираем подчёркивание */
+    transition: color 0.3s ease; /* Плавный переход цвета */
+}
+
+.top-banner a:hover {
+    color: #ff6600; /* Оранжевый цвет при наведении */
+}
+
+.btn-link {
+    font-size: 0.9em;
+    text-decoration: none; /* Убираем подчёркивание */
+    color: #000000; /* Белый цвет кнопки */
+}
+
+.btn-link:hover {
+    color: #fafafa; /* Цвет при наведении */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto; /* Убираем отступ сверху и снизу */
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+/* Дополнительные стили для текста внутри блока */
+.container h1, .container h2, .container h3 {
+    color: #222; /* Более насыщенный цвет для заголовков */
+    margin-bottom: 20px; /* Отступ снизу */
+    font-weight: 700; /* Жирный текст */
+    text-align: center; /* Центрирование заголовков */
+}
+
+.container p {
+    color: #555; /* Менее насыщенный цвет для текста */
+    font-size: 1rem; /* Стандартный размер шрифта */
+    line-height: 1.6; /* Высота строки для улучшения читаемости */
+    margin-bottom: 15px; /* Отступы между абзацами */
+}
+
+.container a {
+    color: #ff6600; /* Оранжевый цвет ссылок */
+    text-decoration: none; /* Убираем подчёркивание */
+    font-weight: bold; /* Жирный текст для ссылок */
+}
+
+.container a:hover {
+    color: #e55d00; /* Более тёмный оранжевый при наведении */
+    text-decoration: underline; /* Подчёркивание при наведении */
+}
+
+/* Карточки продуктов */
+.product-card {
+    background-color: rgba(255, 255, 255, 0.9); /* Полупрозрачный белый фон */
+    border-radius: 10px; /* Округлые углы */
+    overflow: hidden; /* Убираем выход за рамки */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Лёгкая тень */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Плавные переходы */
+    text-align: center;
+    padding: 15px; /* Внутренние отступы */
+}
+
+/* Анимация при наведении на карточку */
+.product-card:hover {
+    transform: translateY(-5px); /* Поднимаем карточку */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Увеличиваем тень */
+}
+
+/* Изображения в карточках */
+.product-card img {
+    width: 100%; /* Адаптация изображения под ширину карточки */
+    height: 200px; /* Фиксированная высота */
+    object-fit: cover; /* Сохранение пропорций изображения */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Разделительная линия */
+    margin-bottom: 15px; /* Отступ снизу */
+}
+
+/* Контент карточки */
+.product-card .card-body {
+    padding: 10px;
+}
+
+.product-card h5 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: #333;
+    font-weight: bold;
+}
+
+.product-card p {
+    font-size: 1em;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+/* Кнопка в карточке */
+.product-card .btn {
+    background-color: #ff6600; /* Оранжевый цвет кнопки */
+    border: none; /* Убираем рамки */
+    color: white;
+    padding: 10px 20px;
+    font-size: 0.9em;
+    border-radius: 5px;
     transition: background-color 0.3s ease;
 }
 
-.btn-primary:hover {
-    background-color: #e55d00;
-    border-color: #e55d00;
+.product-card .btn:hover {
+    background-color: #e55d00; /* Более тёмный оранжевый при наведении */
 }
 
-.navbar-nav {
-    display: flex;
-    flex-wrap: nowrap; /* Запрет на перенос */
+.transparent-container {
+    background-color: rgba(255, 255, 255, 0.1); /* Полупрозрачный белый фон */
+    border-radius: 10px; /* Округлые углы */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Лёгкая тень */
+    backdrop-filter: blur(10px); /* Эффект размытия за контейнером */
+    padding: 20px; /* Внутренние отступы */
+    color: #333; /* Основной цвет текста */
+    border: none; /* Убираем рамки */
 }
 
-/* Анимация ссылок в навигационном меню при наведении */
-.navbar-nav .nav-link {
+/* Унификация стилей кнопок и ссылок в навигации */
+.navbar .nav-link {
     font-size: 1em;
     font-weight: bold;
-    color: #333;
-    margin-right: 15px;
-    transition: color 0.3s ease;
-    white-space: nowrap;
+    color: #333; /* Основной цвет текста */
+    text-decoration: none; /* Убираем подчёркивание */
+    padding: 0.5rem 1rem; /* Внутренние отступы */
+    transition: color 0.3s ease; /* Плавный переход цвета */
 }
 
-.navbar-nav .nav-link:hover {
-    color: #ff6600;
+.navbar .nav-link:hover {
+    color: #ff6600; /* Цвет при наведении */
 }
 
-.navbar-nav .nav-item:last-child .nav-link {
-    margin-right: 0; /* Убираем отступ у последнего элемента */
-}
-
-/* Анимация для категории карточек */
-.category-card {
-    width: 300px;
-    margin: 15px auto;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.category-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-/* Анимация для названия магазина */
-.store-name {
-    font-family: 'Raleway', sans-serif;
-    font-size: 1.1em; /* Уменьшение размера шрифта */
+.navbar .btn {
+    all: unset; /* Убираем все стандартные стили кнопки */
+    display: inline-block; /* Превращаем в блочный элемент */
+    font-size: 1em;
     font-weight: bold;
-    color: #333;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-left: 10px;
-    transition: color 0.3s ease;
+    color: #333; /* Основной цвет текста */
+    padding: 0.5rem 1rem; /* Внутренние отступы */
+    cursor: pointer; /* Указываем, что это кликабельный элемент */
+    transition: color 0.3s ease; /* Плавный переход цвета */
 }
 
-.store-name:hover {
-    color: #007bff; /* Цвет при наведении */
+.navbar .btn:hover {
+    color: #ff6600; /* Цвет при наведении */
 }
+

@@ -2,40 +2,31 @@
 {% load static %}
 
 {% block content %}
-<div class="container mt-5">
-    <!-- Основные категории товаров -->
-    <h2>Категории</h2>
-    <div class="row my-4">
-        <div class="col-md-4">
-            <a href="{% url 'Game_Territory:board_games' %}">
-                <div class="card">
-                    <img src="{% static 'Game_Territory/images/category_boardgames.jpg' %}" class="card-img-top" alt="Настольные игры">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Настольные игры</h5>
+
+{#<div class="container transparent-container mt-5">#}
+{#    <!-- Информация о магазине -->#}
+    <div class="store-info">
+        <h1>Добро пожаловать в "Территорию игр"</h1>
+        <p>Ваш лучший выбор для настольных игр, варгеймов и других увлекательных развлечений!</p>
+    </div>
+
+    <!-- Популярные товары -->
+    <div class="popular-products">
+        <h2>Популярные товары</h2>
+        <div class="row my-4">
+            {% for product in popular_products %}
+                <div class="col-md-4">
+                    <div class="product-card">
+                        <img src="{{ product.image_url }}" alt="{{ product.name }}">
+                        <div class="card-body">
+                            <h5>{{ product.name }}</h5>
+                            <p>{{ product.price|floatformat:2 }} руб.</p>
+                            <a href="{% url 'Game_Territory:product_detail' product.id %}" class="btn btn-primary">Подробнее</a>
+                        </div>
                     </div>
                 </div>
-            </a>
-        </div>
-        <div class="col-md-4">
-            <a href="{% url 'Game_Territory:wargames' %}">
-                <div class="card">
-                    <img src="{% static 'Game_Territory/images/category_wargames.jpg' %}" class="card-img-top" alt="Варгеймы">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Варгеймы</h5>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-4">
-            <a href="{% url 'Game_Territory:infinity' %}">
-                <div class="card">
-                    <img src="{% static 'Game_Territory/images/category_infinity.jpg' %}" class="card-img-top" alt="Infinity">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Infinity</h5>
-                    </div>
-                </div>
-            </a>
+            {% endfor %}
         </div>
     </div>
-</div>
+{#</div>#}
 {% endblock %}

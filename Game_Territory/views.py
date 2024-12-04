@@ -12,8 +12,9 @@ from matplotlib import pyplot as plt
 from io import BytesIO
 from django.core.mail import send_mail
 from django.contrib import messages
-
-
+from django.shortcuts import render, redirect
+from django.db.models import Sum
+import random
 
 def register(request):
     if request.method == 'POST':
@@ -135,10 +136,31 @@ def cart_detail(request):
     cart, created = Cart.objects.get_or_create(user=request.user)
     return render(request, 'Game_Territory/cart_detail.html', {'cart': cart})
 
+@login_required
 def remove_from_cart(request, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
+    product_name = cart_item.product.name
     cart_item.delete()
-    return redirect('store:cart_detail')
+
+    messages.success(request, f'Товар "{product_name}" удалён из корзины.')
+    return redirect('Game_Territory:view_cart')
+
+
+@login_required
+def update_cart_item(request, item_id):
+    cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
+
+    if request.method == 'POST':
+        quantity = int(request.POST.get('quantity', 1))
+        if quantity > 0:
+            cart_item.quantity = quantity
+            cart_item.save()
+            messages.success(request, f'Количество товара "{cart_item.product.name}" обновлено.')
+        else:
+            cart_item.delete()
+            messages.success(request, f'Товар "{cart_item.product.name}" удалён из корзины.')
+
+    return redirect('Game_Territory:view_cart')
 
 def create_order(request):
     cart = get_object_or_404(Cart, user=request.user)
@@ -207,9 +229,15 @@ def manage_orders(request):
         orders = Order.objects.all()
     return render(request, 'Game_Territory/manage_orders.html', {'orders': orders, 'status': status})
 
+
 def home(request):
-    products = Product.objects.all()
-    return render(request, 'Game_Territory/home.html', {'products': products})
+    # Получаем все товары из каталога
+    all_products = list(Product.objects.all())
+
+    # Случайно выбираем до 6 товаров
+    popular_products = random.sample(all_products, min(len(all_products), 6))
+
+    return render(request, 'Game_Territory/home.html', {'popular_products': popular_products})
 
 
 def stores(request):
@@ -367,3 +395,78 @@ def delete_user(request, user_id):
 def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
     return render(request, 'Game_Territory/product_detail.html', {'product': product})
+
+
+# Добавление товара в корзину
+@login_required
+def add_to_cart(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+
+    if not created:
+        cart_item.quantity += 1
+    else:
+        cart_item.quantity = 1
+    cart_item.save()
+
+    messages.success(request, f'Товар "{product.name}" добавлен в корзину.')
+    return redirect('Game_Territory:view_cart')
+
+
+# Отображение корзины
+@login_required
+def view_cart(request):
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart_items = cart.items.all()
+    for item in cart_items:
+        print(f"Товар: {item.product.name}, Цена: {item.product.price}, Количество: {item.quantity}")
+    total_price = sum(item.product.price * item.quantity for item in cart_items)
+
+    return render(request, 'Game_Territory/view_cart.html', {
+        'cart_items': cart_items,
+        'total_price': total_price
+    })
+
+
+# Оформление заказа
+@login_required
+def checkout(request):
+    cart = Cart.objects.get(user=request.user)
+    cart_items = cart.items.all()
+
+    if not cart_items:
+        return HttpResponse("Корзина пуста", status=400)
+
+    total_price = sum(item.product.price * item.quantity for item in cart_items)
+
+    if request.method == 'POST':
+        delivery_method = request.POST.get('delivery_method')
+        address = request.POST.get('address') if delivery_method == 'delivery' else None
+
+        # Создаем заказ
+        order = Order.objects.create(
+            customer=request.user,
+            status='pending',
+            delivery_method=delivery_method,
+            address=address,
+            is_paid=False
+        )
+
+        # Добавляем товары в заказ
+        for item in cart_items:
+            order.products.add(item.product)
+
+        # Очищаем корзину
+        cart.items.all().delete()
+
+        return redirect('Game_Territory:order_detail', order_id=order.id)
+
+    return render(request, 'Game_Territory/checkout.html', {'cart_items': cart_items, 'total_price': total_price})
+
+
+# Детали заказа
+@login_required
+def order_detail(request, order_id):
+    order = Order.objects.get(id=order_id)
+    return render(request, 'Game_Territory/order_detail.html', {'order': order})

@@ -3,8 +3,8 @@
 <ul>
     {% for item in cart.items.all %}
         <li>{{ item.product.name }} - {{ item.quantity }} шт.
-            <a href="{% url 'store:remove_from_cart' item.id %}">Удалить</a>
+            <a href="{% url 'Game_Territory:remove_from_cart' item.id %}">Удалить</a>
         </li>
     {% endfor %}
 </ul>
-<a href="{% url 'store:create_order' %}">Оформить заказ</a>
+<a href="{% url 'Game_Territory:create_order' %}">Оформить заказ</a>
