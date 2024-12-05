@@ -3,7 +3,7 @@ from django.contrib.auth import login
 from .forms import RegisterForm
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ProductForm, OrderForm, ProfileForm, AvatarForm
-from .models import Product, Order, CartItem, Cart, UserProfile
+from .models import Product, Order, CartItem, Cart, UserProfile, OrderItem
 from .decorators import role_required
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import user_passes_test, login_required
@@ -63,7 +63,7 @@ def personal_info(request):
 
 @login_required
 def my_orders(request):
-    orders = Order.objects.filter(customer=request.user)
+    orders = Order.objects.filter(customer=request.user).prefetch_related('items__product')
     return render(request, 'Game_Territory/my_orders.html', {'orders': orders, 'active_tab': 'my_orders'})
 
 @login_required
@@ -138,18 +138,6 @@ def product_delete(request, pk):
         return redirect('store:product_list')
     return render(request, 'Game_Territory/product_confirm_delete.html', {'product': product})
 
-def create_order(request):
-    if request.method == 'POST':
-        form = OrderForm(request.POST)
-        if form.is_valid():
-            order = form.save(commit=False)
-            order.customer = request.user
-            order.save()
-            form.save_m2m()
-            return redirect('store:order_success')
-    else:
-        form = OrderForm()
-    return render(request, 'Game_Territory/order_form.html', {'form': form})
 
 
 @user_passes_test(lambda u: u.userprofile.role == 'admin')
@@ -231,42 +219,34 @@ def update_cart_item(request, item_id):
 
     return redirect('Game_Territory:view_cart')
 
-def create_order(request):
-    cart = get_object_or_404(Cart, user=request.user)
-    if cart.items.count() == 0:
-        return redirect('store:cart_detail')  # Переход в корзину, если она пуста
-
-    if request.method == 'POST':
-        form = OrderForm(request.POST)
-        if form.is_valid():
-            order = form.save(commit=False)
-            order.customer = request.user
-            order.save()
-            for item in cart.items.all():
-                order.products.add(item.product)
-            cart.items.all().delete()  # Очистить корзину после оформления заказа
-            return redirect('store:order_success')
-    else:
-        form = OrderForm()
-    return render(request, 'Game_Territory/order_form.html', {'form': form})
 
 def order_success(request):
     return render(request, 'Game_Territory/order_success.html')
 
 
 def create_order(request):
+    # Получаем корзину пользователя
     cart = get_object_or_404(Cart, user=request.user)
     if cart.items.count() == 0:
-        return redirect('store:cart_detail')
+        return redirect('Game_Territory:cart_detail')
 
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
+            # Создаем заказ
             order = form.save(commit=False)
             order.customer = request.user
             order.save()
+
+            # Создаем OrderItem для каждого товара в корзине
             for item in cart.items.all():
-                order.products.add(item.product)
+                OrderItem.objects.create(
+                    order=order,
+                    product=item.product,
+                    quantity=item.quantity,
+                )
+
+            # Очищаем корзину
             cart.items.all().delete()
 
             # Уведомление по email
@@ -279,9 +259,10 @@ def create_order(request):
             )
 
             messages.success(request, 'Ваш заказ был успешно оформлен!')
-            return redirect('store:order_success')
+            return redirect('Game_Territory:order_success')
     else:
         form = OrderForm()
+
     return render(request, 'Game_Territory/order_form.html', {'form': form})
 
 @login_required

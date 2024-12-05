@@ -2,120 +2,54 @@
 {% load custom_filters %}
 
 {% block content %}
-<h1>Корзина</h1>
+<div class="vh-100">
+    <h1 class="text-center mb-4">Корзина</h1>
 
-{% if cart_items %}
-    <style>
-        .cart-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+    {% if cart_items %}
+        <div class="cart-container">
+            {% for item in cart_items %}
+                <div class="cart-item d-flex justify-content-between align-items-center mb-3 p-2 shadow-sm rounded">
+                    <!-- Карточка товара -->
+                    <div class="d-flex align-items-center">
+                        <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="product-image rounded">
+                        <div class="product-details ms-3">
+                            <h2 class="product-name h6 mb-1">{{ item.product.name }}</h2>
+                            <p class="product-price text-muted mb-1">Цена: {{ item.product.price|floatformat:2 }} руб.</p>
+                            <p class="product-total fw-bold">Итого: 
+                                {% with item.product.price|multiply:item.quantity as total %}
+                                    {{ total|floatformat:2 }} руб.
+                                {% endwith %}
+                            </p>
+                        </div>
+                    </div>
 
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        .product-card {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .product-image {
-            width: 120px; /* Фиксированная ширина */
-            height: 120px; /* Фиксированная высота */
-            object-fit: cover; /* Обеспечивает обрезку изображения, сохраняя пропорции */
-            border-radius: 5px; /* Закругление углов */
-            border: 1px solid #ddd; /* Граница для улучшения визуального восприятия */
-        }
-
-        .product-details {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .product-name {
-            font-size: 1.2em;
-            margin: 0;
-        }
-
-        .product-description {
-            font-size: 0.9em;
-            color: #666;
-        }
-
-        .product-price {
-            font-weight: bold;
-            color: #333;
-        }
-
-        .cart-item-controls {
-            text-align: right;
-        }
-
-        .btn-delete {
-            background-color: red;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 3px;
-        }
-
-        .btn-delete:hover {
-            background-color: darkred;
-        }
-    </style>
-
-    <div class="cart-container">
-        {% for item in cart_items %}
-            <div class="cart-item">
-                <!-- Карточка товара -->
-                <div class="product-card">
-                    <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="product-image">
-                    <div class="product-details">
-                        <h2 class="product-name">{{ item.product.name }}</h2>
-                        <p class="product-description">{{ item.product.description }}</p>
-                        <p class="product-price">{{ item.product.price|floatformat:2 }} руб.</p>
+                    <!-- Управление количеством -->
+                    <div class="cart-item-controls text-center">
+                        <form action="{% url 'Game_Territory:update_cart_item' item.id %}" method="POST" class="d-flex flex-column">
+                            {% csrf_token %}
+                            <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control form-control-sm w-50 mx-auto mb-2">
+                            <button type="submit" class="btn btn-primary btn-sm">Обновить</button>
+                        </form>
+                        <form action="{% url 'Game_Territory:remove_from_cart' item.id %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm mt-1">Удалить</button>
+                        </form>
                     </div>
                 </div>
+            {% endfor %}
+        </div>
 
-                <!-- Управление количеством -->
-                <div class="cart-item-controls">
-                    <form action="{% url 'Game_Territory:update_cart_item' item.id %}" method="POST">
-                        {% csrf_token %}
-                        <input type="number" name="quantity" value="{{ item.quantity }}" min="1">
-                        <button type="submit">Обновить</button>
-                    </form>
+        <div class="cart-summary text-end mt-4">
+            <h4>Общая сумма: <span class="text-success">{{ total_price|floatformat:2 }} руб.</span></h4>
+            <a href="{% url 'Game_Territory:create_order' %}" class="btn btn-success btn-sm mt-2">Оформить заказ</a>
+        </div>
+    {% else %}
+        <p class="text-center mt-5">Ваша корзина пуста.</p>
+        <div class="text-center mt-3">
+            <a href="{% url 'Game_Territory:home' %}" class="btn btn-secondary btn-sm">Вернуться к покупкам</a>
+        </div>
+    {% endif %}
+</div>
 
-                    <!-- Итоговая стоимость -->
-                    <p class="product-total">
-                        {% with item.product.price|multiply:item.quantity as total %}
-                            Итого: {{ total|floatformat:2 }} руб.
-                        {% endwith %}
-                    </p>
-
-                    <!-- Удаление товара -->
-                    <form action="{% url 'Game_Territory:remove_from_cart' item.id %}" method="POST">
-                        {% csrf_token %}
-                        <button type="submit" class="btn-delete">Удалить</button>
-                    </form>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-
-    <h3>Общая сумма: {{ total_price|floatformat:2 }} руб.</h3>
-    <a href="{% url 'Game_Territory:checkout' %}" class="btn btn-primary">Оформить заказ</a>
-{% else %}
-    <p>Ваша корзина пуста.</p>
-{% endif %}
-
-<a href="{% url 'Game_Territory:home' %}" class="btn btn-secondary">Вернуться к покупкам</a>
 {% endblock %}
+ 

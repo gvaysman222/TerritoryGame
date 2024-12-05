@@ -1,4 +1,8 @@
-<!-- templates/store/order_form.html -->
+{% extends "base.html" %}
+
+{% block content %}
+    
+    <div class="vh-100"><!-- templates/store/order_form.html -->
 <h2>Оформление заказа</h2>
 <p>Ваши товары:</p>
 <ul>
@@ -11,3 +15,6 @@
     {{ form.as_p }}
     <button type="submit">Оформить заказ</button>
 </form>
+</div>
+
+{% endblock %}

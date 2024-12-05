@@ -1,4 +1,6 @@
-<!-- templates/store/cart_detail.html -->
+{% extends "base.html" %}
+
+{% block content %}<!-- templates/store/cart_detail.html -->
 <h2>Корзина</h2>
 <ul>
     {% for item in cart.items.all %}
@@ -8,3 +10,5 @@
     {% endfor %}
 </ul>
 <a href="{% url 'Game_Territory:create_order' %}">Оформить заказ</a>
+
+{% endblock %}

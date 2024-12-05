@@ -1,4 +1,11 @@
-<!-- templates/store/order_success.html -->
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="vh-100">
 <h2>Спасибо за ваш заказ!</h2>
 <p>Ваш заказ был успешно оформлен. Вы получите уведомление по электронной почте, когда он будет обработан.</p>
-<a href="{% url 'store:product_list' %}">Продолжить покупки</a>
+<a href="{% url 'Game_Territory:product_list' %}">Продолжить покупки</a>
+    
+    </div>
+
+{% endblock %}
