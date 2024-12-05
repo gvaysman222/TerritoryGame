@@ -114,7 +114,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-LOGIN_REDIRECT_URL = '/'
 
 
 # Static files (CSS, JavaScript, Images)
@@ -138,3 +137,6 @@ EMAIL_HOST_USER = 'your-email@example.com'
 EMAIL_HOST_PASSWORD = 'your-password'
 
 LANGUAGE_CODE = 'ru'
+
+LOGIN_URL = '/login/'  # URL для перенаправления на страницу входа
+LOGIN_REDIRECT_URL = '/'  # URL для перенаправления после успешного входа
