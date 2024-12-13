@@ -61,6 +61,7 @@ urlpatterns = [
     path('admin_panel/', views.admin_panel, name='admin_panel'),
     path("edit_profile/", views.edit_profile, name="edit_profile"),
     path("change_password/", views.change_password, name="change_password"),
+    path('delivery_info/', views.delivery_info, name='delivery_info'),
 ]
 
 if settings.DEBUG:

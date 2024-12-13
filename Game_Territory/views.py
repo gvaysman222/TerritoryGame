@@ -568,3 +568,6 @@ def checkout(request):
 def order_detail(request, order_id):
     order = Order.objects.get(id=order_id)
     return render(request, 'Game_Territory/order_detail.html', {'order': order})
+
+def delivery_info(request):
+    return render(request, 'Game_Territory/delivery_info.html')
