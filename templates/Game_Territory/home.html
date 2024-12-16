@@ -4,14 +4,14 @@
 {% block content %}
 
 <div class="content-container">
-    {# Информация о магазине #}
-    <div class="store-info">
+    <!-- Информация о магазине -->
+    <div class="store-info text-center">
         <h1>Добро пожаловать в "Территорию игр"</h1>
         <p>Ваш лучший выбор для настольных игр, варгеймов и других увлекательных развлечений!</p>
     </div>
 
-    {# Преимущества компании #}
-    <div class="company-advantages test-center">
+    <!-- Преимущества компании -->
+    <div class="company-advantages text-center">
         <button id="toggle-btn" class="dropdown-btn">Наши преимущества</button>
         <div id="dropdown-content" class="dropdown-content">
             <ul>
@@ -24,16 +24,16 @@
         </div>
     </div>
 
-    {# Популярные товары #}
-    <div class="popular-products">
-        <h2>Популярные товары</h2>
-        <div class="products-container">
-            {% for product in popular_products %}
-                <div class="product-card">
-                    <img src="{{ product.image_url }}" alt="{{ product.name }}">
-                    <div class="card-body">
-                        <h5>{{ product.name }}</h5>
-                        <p>{{ product.price|floatformat:2 }} руб.</p>
+    <!-- Популярные товары -->
+    <div class="popular-products mt-5">
+        <h2 class="text-center mb-4">Популярные товары</h2>
+        <div class="products-container d-flex flex-wrap justify-content-center gap-4">
+            {% for product in popular_products|slice:":4" %}
+                <div class="product-card card shadow-sm" style="width: 18rem;">
+                    <img src="{{ product.image_url }}" alt="{{ product.name }}" class="card-img-top">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">{{ product.price|floatformat:2 }} руб.</p>
                         <a href="{% url 'Game_Territory:product_detail' product.id %}" class="btn btn-dark">Подробнее</a>
                     </div>
                 </div>
