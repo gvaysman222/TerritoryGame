@@ -2,26 +2,38 @@
 {% load static %}
 
 {% block content %}
-
-<div class="content-container">
+<div class="content-container text-center">
     <!-- Информация о магазине -->
-    <div class="store-info text-center">
+    <div class="store-info mb-5">
         <h1>Добро пожаловать в "Территорию игр"</h1>
         <p>Ваш лучший выбор для настольных игр, варгеймов и других увлекательных развлечений!</p>
     </div>
 
     <!-- Преимущества компании -->
-    <div class="company-advantages text-center">
-        <div class="dropdown-wrapper">
-            <button id="toggle-btn" class="dropdown-btn">Наши преимущества</button>
-            <div id="dropdown-content" class="dropdown-content">
-                <ul>
-                    <li>Широкий ассортимент настольных игр на любой вкус</li>
-                    <li>Только качественная продукция от проверенных производителей</li>
-                    <li>Удобные способы оплаты и доставки</li>
-                    <li>Регулярные акции и скидки для постоянных клиентов</li>
-                    <li>Профессиональная поддержка и консультации по выбору игр</li>
-                </ul>
+    <div class="company-advantages mb-5">
+        <!-- Заголовок по центру -->
+        <h2 class="text-center mb-4">Наши преимущества</h2>
+        <!-- Карточки в ряд -->
+        <div class="d-flex flex-wrap justify-content-center gap-4">
+            <div class="advantage-card text-center p-3 shadow-sm rounded">
+                <img src="{% static 'Game_Territory/images/advantage1.png' %}" alt="Широкий ассортимент" width="70">
+                <p class="mt-3">Широкий ассортимент игр на любой вкус</p>
+            </div>
+            <div class="advantage-card text-center p-3 shadow-sm rounded">
+                <img src="{% static 'Game_Territory/images/advantage2.png' %}" alt="Качественная продукция" width="70">
+                <p class="mt-3">Только качественная продукция</p>
+            </div>
+            <div class="advantage-card text-center p-3 shadow-sm rounded">
+                <img src="{% static 'Game_Territory/images/advantage3.png' %}" alt="Удобные способы оплаты" width="70">
+                <p class="mt-3">Удобные способы оплаты и доставки</p>
+            </div>
+            <div class="advantage-card text-center p-3 shadow-sm rounded">
+                <img src="{% static 'Game_Territory/images/advantage4.png' %}" alt="Акции и скидки" width="70">
+                <p class="mt-3">Регулярные акции и скидки</p>
+            </div>
+            <div class="advantage-card text-center p-3 shadow-sm rounded">
+                <img src="{% static 'Game_Territory/images/advantage5.png' %}" alt="Профессиональная поддержка" width="70">
+                <p class="mt-3">Профессиональная поддержка</p>
             </div>
         </div>
     </div>
@@ -41,22 +53,12 @@
                 </div>
             {% endfor %}
         </div>
+        <!-- Кнопка "Перейти в каталог" -->
+        <div class="mt-4">
+            <a href="{% url 'Game_Territory:product_list' %}" class="btn btn-outline-dark btn-lg">
+                Перейти в каталог
+            </a>
+        </div>
     </div>
 </div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const toggleBtn = document.getElementById("toggle-btn");
-        const dropdownContent = document.getElementById("dropdown-content");
-
-        toggleBtn.addEventListener("click", () => {
-            if (dropdownContent.style.maxHeight) {
-                dropdownContent.style.maxHeight = null; // Сворачиваем блок
-            } else {
-                dropdownContent.style.maxHeight = dropdownContent.scrollHeight + "px"; // Раскрываем блок
-            }
-        });
-    });
-</script>
-
 {% endblock %}
