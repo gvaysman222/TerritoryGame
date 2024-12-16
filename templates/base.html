@@ -5,14 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Территория игр</title>
+    <!-- Подключение стилей -->
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="{% static 'Game_Territory/css/style.css' %}" rel="stylesheet">
 </head>
 
 <body>
-    <!-- Навигационная панель -->
-    <nav class="navbar navbar-expand-lg navbar-light custom-navbar">
+    <!-- Обычный Bootstrap navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container" style="max-width: 1200px;">
             <a class="navbar-brand" href="{% url 'Game_Territory:home' %}">
                 <img src="{% static 'Game_Territory/images/logo.png' %}" alt="Logo" height="40">
@@ -29,7 +30,6 @@
                 </ul>
                 <ul class="navbar-nav">
                     {% if user.is_authenticated %}
-                                                <!-- Кнопка "Корзина" -->
                         <li class="nav-item">
                             <a class="btn btn-outline-dark" href="{% url 'Game_Territory:cart_detail' %}">Корзина</a>
                         </li>
@@ -48,14 +48,14 @@
     </nav>
 
     <!-- Основной контент -->
-    <main class="main-content my-4">
+    <main class="main-content mt-4">
         <div class="container" style="max-width: 1200px;">
             {% block content %}{% endblock %}
         </div>
     </main>
 
     <!-- Footer -->
-    <footer class="custom-footer text-center mt-auto py-3">
+    <footer class="custom-footer text-center py-3 bg-dark text-white">
         <div>&copy; 2024 Территория игр | +7 (999) 123-45-67</div>
     </footer>
 
