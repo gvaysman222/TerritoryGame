@@ -1,42 +1,62 @@
 {% extends "Game_Territory/profile.html" %}
 
 {% block cabinet_content %}
-<div class="card mb-4">
-    <div class="card-body">
-        <h5 class="card-title">Личная информация</h5>
-            <p>Имя: {{ request.user.first_name }}</p>
-            <p>Фамилия: {{ request.user.last_name }}</p>
-            <p>Email: {{ request.user.email }}</p>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <input type="hidden" name="profile_form" value="true">
-            <div class="mb-3">
-                <label for="id_first_name" class="form-label">Имя</label>
-                <input type="text" name="first_name" id="id_first_name" class="form-control" value="{{ request.user.first_name }}">
-            </div>
-            <div class="mb-3">
-                <label for="id_last_name" class="form-label">Фамилия</label>
-                <input type="text" name="last_name" id="id_last_name" class="form-control" value="{{ request.user.last_name }}">
-            </div>
-            <div class="mb-3">
-                <label for="id_email" class="form-label">Email</label>
-                <input type="email" name="email" id="id_email" class="form-control" value="{{ request.user.email }}">
-            </div>
-            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
-        </form>
-    </div>
-</div>
+<div class="info-container">
 
-<!-- Форма смены пароля -->
-<div class="card mt-4">
-    <div class="card-body">
-        <h5 class="card-title">Сменить пароль</h5>
-        <form method="post">
-            {% csrf_token %}
-            <input type="hidden" name="password_form" value="true">
-            {{ password_form.as_p }}
-            <button type="submit" class="btn btn-primary">Сменить пароль</button>
-        </form>
+    <!-- Карточка Личной информации -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header text-white bg-dark">
+            <h5 class="card-title mb-0 text-white">Личная информация</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="profile_form" value="true">
+                <div class="mb-3">
+                    <label for="id_first_name" class="form-label">Имя</label>
+                    <input type="text" name="first_name" id="id_first_name" class="form-control" 
+                           value="{{ request.user.first_name }}" placeholder="Введите имя">
+                </div>
+                <div class="mb-3">
+                    <label for="id_last_name" class="form-label">Фамилия</label>
+                    <input type="text" name="last_name" id="id_last_name" class="form-control" 
+                           value="{{ request.user.last_name }}" placeholder="Введите фамилию">
+                </div>
+                <div class="mb-3">
+                    <label for="id_email" class="form-label">Email</label>
+                    <input type="email" name="email" id="id_email" class="form-control" 
+                           value="{{ request.user.email }}" placeholder="Введите email">
+                </div>
+                <button type="submit" class="btn btn-dark w-100">Сохранить изменения</button>
+            </form>
+        </div>
     </div>
+
+    <!-- Карточка Смены пароля -->
+    <div class="card mt-4 shadow-sm">
+        <div class="card-header text-white bg-dark">
+            <h5 class="card-title mb-0 text-white">Сменить пароль</h5>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="password_form" value="true">
+                <div class="mb-3">
+                    <label for="id_old_password" class="form-label">Старый пароль</label>
+                    <input type="password" name="old_password" id="id_old_password" class="form-control" placeholder="Введите старый пароль">
+                </div>
+                <div class="mb-3">
+                    <label for="id_new_password1" class="form-label">Новый пароль</label>
+                    <input type="password" name="new_password1" id="id_new_password1" class="form-control" placeholder="Введите новый пароль">
+                </div>
+                <div class="mb-3">
+                    <label for="id_new_password2" class="form-label">Подтвердите новый пароль</label>
+                    <input type="password" name="new_password2" id="id_new_password2" class="form-control" placeholder="Повторите новый пароль">
+                </div>
+                <button type="submit" class="btn btn-dark w-100">Сменить пароль</button>
+            </form>
+        </div>
+    </div>
+
 </div>
 {% endblock %}

@@ -49,27 +49,28 @@ class Order(models.Model):
     status = models.CharField(max_length=10, choices=ORDER_STATUS_CHOICES, default='pending')
     delivery_method = models.CharField(max_length=10, choices=DELIVERY_CHOICES)
     address = models.CharField(max_length=255, blank=True, null=True)
+    full_name = models.CharField(max_length=255)  # ФИО
+    phone = models.CharField(max_length=20)  # Телефон
+    comment = models.TextField(blank=True, null=True)  # Комментарий
     created_at = models.DateTimeField(auto_now_add=True)
     is_paid = models.BooleanField(default=False)
 
     @property
     def total_price(self):
-        """Проверка на отладку."""
-        total = 0
-        for item in self.items.all():
-            total += item.product.price * item.quantity
-            print(
-                f"Product: {item.product.name}, Price: {item.product.price}, Quantity: {item.quantity}, Subtotal: {item.product.price * item.quantity}")
-        print(f"Order {self.id} Total: {total}")
-        return total
+        return sum(item.product.price * item.quantity for item in self.items.all())
 
     def __str__(self):
-        return f"Order {self.id} - {self.customer.username}"
+        return f'Заказ #{self.id} от {self.customer.username}'
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
+    price = models.DecimalField(max_digits=10, decimal_places=2)  # Добавляем цену товара
+
+    def total_price(self):
+        return self.quantity * self.price
 
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

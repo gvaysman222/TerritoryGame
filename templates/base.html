@@ -5,52 +5,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Территория игр</title>
-    <!-- Подключение Bootstrap CSS и дополнительные стили -->
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="{% static 'Game_Territory/css/style.css' %}" rel="stylesheet">
-    
 </head>
 
 <body>
     <!-- Навигационная панель -->
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="container-fluid custom-navbar">
-            <!-- Логотип -->
+    <nav class="navbar navbar-expand-lg navbar-light custom-navbar">
+        <div class="container" style="max-width: 1200px;">
             <a class="navbar-brand" href="{% url 'Game_Territory:home' %}">
                 <img src="{% static 'Game_Territory/images/logo.png' %}" alt="Logo" height="40">
-                <span class="store-name">Game Territory</span>
+                Game Territory
             </a>
-            <!-- Кнопка для мобильного меню -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <!-- Основное меню -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item"><a class="nav-link" href="{% url 'Game_Territory:product_list' %}">Каталог</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'Game_Territory:about' %}">О нас</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'Game_Territory:delivery_info' %}">Информация о доставке</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'Game_Territory:delivery_info' %}">Доставка</a></li>
                 </ul>
-                <!-- Кнопки входа/выхода -->
                 <ul class="navbar-nav">
                     {% if user.is_authenticated %}
+                                                <!-- Кнопка "Корзина" -->
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'Game_Territory:profile' %}">Мой кабинет</a>
+                            <a class="btn btn-outline-dark" href="{% url 'Game_Territory:cart_detail' %}">Корзина</a>
                         </li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'Game_Territory:profile' %}">Мой кабинет</a></li>
                         <li class="nav-item">
-                            <a class="nav-link logout-link" href="#" onclick="document.getElementById('logout-form').submit();">Выход</a>
-                            <form id="logout-form" action="{% url 'Game_Territory:logout' %}" method="post" style="display: none;">
-                                {% csrf_token %}
-                            </form>
+                            <a class="nav-link" href="#" onclick="document.getElementById('logout-form').submit();">Выход</a>
+                            <form id="logout-form" action="{% url 'Game_Territory:logout' %}" method="post" style="display: none;">{% csrf_token %}</form>
                         </li>
                     {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'Game_Territory:login' %}">Вход</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'Game_Territory:register' %}">Регистрация</a>
-                        </li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'Game_Territory:login' %}">Вход</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'Game_Territory:register' %}">Регистрация</a></li>
                     {% endif %}
                 </ul>
             </div>
@@ -58,24 +48,20 @@
     </nav>
 
     <!-- Основной контент -->
-    <div class="content">
-        <div class="container">
+    <main class="main-content my-4">
+        <div class="container" style="max-width: 1200px;">
             {% block content %}{% endblock %}
         </div>
-    </div>
+    </main>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="custom-footer">
-            <p>&copy; 2024 Территория игр</p>
-            <p>+7 (999) 123-45-67</p>
-        </div>
+    <footer class="custom-footer text-center mt-auto py-3">
+        <div>&copy; 2024 Территория игр | +7 (999) 123-45-67</div>
     </footer>
 
-    <!-- Подключение Bootstrap JS и jQuery -->
+    <!-- Подключение JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 </html>

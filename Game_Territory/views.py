@@ -17,6 +17,7 @@ from django.db.models import Sum
 import random
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+from django.http import JsonResponse
 
 @login_required
 def personal_info(request):
@@ -217,17 +218,21 @@ def update_cart_item(request, item_id):
             cart_item.delete()
             messages.success(request, f'Товар "{cart_item.product.name}" удалён из корзины.')
 
-    return redirect('Game_Territory:view_cart')
+    return redirect('Game_Territory:cart_view')
 
 
 def order_success(request):
     return render(request, 'Game_Territory/order_success.html')
 
 
+@login_required
 def create_order(request):
     # Получаем корзину пользователя
     cart = get_object_or_404(Cart, user=request.user)
+
+    # Проверка на пустую корзину
     if cart.items.count() == 0:
+        messages.error(request, "Ваша корзина пуста! Добавьте товары для оформления заказа.")
         return redirect('Game_Territory:cart_detail')
 
     if request.method == 'POST':
@@ -235,36 +240,50 @@ def create_order(request):
         if form.is_valid():
             # Создаем заказ
             order = form.save(commit=False)
-            order.customer = request.user
+            order.customer = request.user  # Устанавливаем покупателя
             order.save()
 
             # Создаем OrderItem для каждого товара в корзине
+            total_price = 0  # Переменная для подсчета общей суммы
             for item in cart.items.all():
                 OrderItem.objects.create(
                     order=order,
                     product=item.product,
                     quantity=item.quantity,
+                    price=item.product.price
                 )
+                total_price += item.product.price * item.quantity  # Считаем общую сумму заказа
+
+            # Если total_price в модели — поле, сохраняем его
+            if hasattr(order, 'total_price'):
+                order.total_price = total_price
+                order.save()
 
             # Очищаем корзину
             cart.items.all().delete()
 
-            # Уведомление по email
+            # Отправка уведомления на email
             send_mail(
                 'Подтверждение заказа',
-                f'Спасибо за ваш заказ №{order.id}! Мы уведомим вас о статусе доставки.',
-                'from@example.com',
+                f'Спасибо за ваш заказ #{order.id}! Общая сумма: {total_price} руб.',
+                'noreply@territorygames.ru',
                 [request.user.email],
                 fail_silently=False,
             )
 
-            messages.success(request, 'Ваш заказ был успешно оформлен!')
+            messages.success(request, f'Ваш заказ #{order.id} успешно оформлен!')
             return redirect('Game_Territory:order_success')
+
     else:
         form = OrderForm()
 
-    return render(request, 'Game_Territory/order_form.html', {'form': form})
-
+    # Подсчет общей суммы для отображения
+    total_price = sum(item.product.price * item.quantity for item in cart.items.all())
+    return render(request, 'Game_Territory/order_form.html', {
+        'form': form,
+        'cart': cart,
+        'total_price': total_price,
+    })
 @login_required
 def order_history(request):
     orders = Order.objects.filter(customer=request.user).order_by('-created_at')
@@ -411,7 +430,14 @@ def user_management(request):
             'is_superuser': user.is_superuser
         })
 
-    return render(request, 'Game_Territory/user_management.html', {
+    # Проверка на AJAX-запрос
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return render(request, 'Game_Territory/user_management_partial.html', {
+            'user_data': user_data,
+        })
+
+    # Если это обычный запрос, возвращаем полный шаблон
+    return render(request, 'Game_Territory/user_management_partial.html', {
         'user_data': user_data,
     })
 
@@ -508,6 +534,9 @@ def add_to_cart(request, product_id):
         cart_item.quantity = 1
     cart_item.save()
 
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':  # Проверка на AJAX
+        return JsonResponse({"status": "success", "message": f'Товар "{product.name}" добавлен в корзину.'})
+
     messages.success(request, f'Товар "{product.name}" добавлен в корзину.')
     return redirect('Game_Territory:view_cart')
 
@@ -571,3 +600,9 @@ def order_detail(request, order_id):
 
 def delivery_info(request):
     return render(request, 'Game_Territory/delivery_info.html')
+
+def search_products(request):
+    """View для поиска товаров по названию."""
+    query = request.GET.get('q', '')
+    products = Product.objects.filter(name__icontains=query) if query else Product.objects.all()
+    return render(request, 'Game_Territory/product_cards.html', {'products': products})

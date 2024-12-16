@@ -1,0 +1,28 @@
+
+{% load static %}
+
+{% for product in products %}
+    <div class="product-card">
+        <!-- Изображение товара -->
+        {% if product.image_url %}
+            <img src="{{ product.image_url }}" alt="{{ product.name }}">
+        {% else %}
+            <img src="{% static 'Game_Territory/images/placeholder.jpg' %}" alt="Изображение недоступно">
+        {% endif %}
+
+        <!-- Информация о товаре -->
+        <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text">{{ product.description|truncatewords:15 }}</p>
+            <p class="font-weight-bold">{{ product.price }} руб.</p>
+        </div>
+
+        <!-- Кнопки действий -->
+        <div class="card-buttons">
+            <a href="{% url 'Game_Territory:product_detail' product.id %}" class="btn btn-dark">Подробнее</a>
+            <a href="{% url 'Game_Territory:add_to_cart' product.id %}" class="btn btn-outline-dark">В корзину</a>
+        </div>
+    </div>
+{% empty %}
+    <p class="text-center">Товары не найдены.</p>
+{% endfor %}

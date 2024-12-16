@@ -2,35 +2,41 @@
 {% load custom_filters %}
 
 {% block content %}
-<div class="d-flex justify-content-center align-items-center vh-100">
-    <div class="login-form p-4 rounded shadow">
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card shadow-lg border-0" style="max-width: 400px; width: 100%;">
         <!-- Заголовок -->
-        <h2 class="text-center mb-4">Вход</h2>
+        <div class="card-header bg-dark text-white text-center">
+            <h3 class="mb-0">Вход</h3>
+        </div>
 
         <!-- Форма входа -->
-        <form method="post">
-            {% csrf_token %}
+        <div class="card-body p-4">
+            <form method="post">
+                {% csrf_token %}
 
-            <!-- Поле имени пользователя -->
-            <div class="form-group mb-3">
-                {{ form.username.label_tag }}
-                {{ form.username|add_class:"form-control rounded-pill" }}
-            </div>
+                <!-- Поле имени пользователя -->
+                <div class="form-group mb-3">
+                    {{ form.username.label_tag }}
+                    {{ form.username|add_class:"form-control rounded-pill" }}
+                </div>
 
-            <!-- Поле пароля -->
-            <div class="form-group mb-3">
-                {{ form.password.label_tag }}
-                {{ form.password|add_class:"form-control rounded-pill" }}
-            </div>
+                <!-- Поле пароля -->
+                <div class="form-group mb-4">
+                    {{ form.password.label_tag }}
+                    {{ form.password|add_class:"form-control rounded-pill" }}
+                </div>
 
-            <!-- Кнопка входа -->
-            <button type="submit" class="btn btn-primary btn-block rounded-pill mb-3">Войти</button>
+                <!-- Кнопка входа -->
+                <button type="submit" class="btn btn-dark btn-block rounded-pill mb-3">Войти</button>
 
-            <!-- Ссылка для регистрации -->
-            <div class="text-center">
-                <p>Еще нет аккаунта? <a href="{% url 'Game_Territory:register' %}" class="text-primary">Зарегистрироваться</a></p>
-            </div>
-        </form>
+                <!-- Ссылка для регистрации -->
+                <div class="text-center">
+                    <p>Еще нет аккаунта? 
+                        <a href="{% url 'Game_Territory:register' %}" class="text-decoration-none">Зарегистрироваться</a>
+                    </p>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}

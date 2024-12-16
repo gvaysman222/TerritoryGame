@@ -1,17 +1,32 @@
 {% extends "Game_Territory/profile.html" %}
 
 {% block cabinet_content %}
-<div class="card">
+<div class="card mb-4">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">Админ панель</h5>
+    </div>
     <div class="card-body">
-        <h5 class="card-title">Админ панель</h5>
-        <p>Доступные функции:</p>
-        <ul>
-            {% if is_admin %}
-                <li><a href="{% url 'Game_Territory:user_management' %}">Управление пользователями</a></li>
-            {% endif %}
-            <li><a href="{% url 'Game_Territory:manage_products' %}">Управление товарами</a></li>
-            <li><a href="{% url 'Game_Territory:order_management' %}">Управление заказами</a></li>
-        </ul>
+        <button class="btn btn-dark mb-2" onclick="loadContent('{% url 'Game_Territory:user_management' %}')">Управление пользователями</button>
+        <button class="btn btn-dark mb-2" onclick="loadContent('{% url 'Game_Territory:manage_products' %}')">Управление товарами</button>
+        <button class="btn btn-dark mb-2" onclick="loadContent('{% url 'Game_Territory:order_management' %}')">Управление заказами</button>
     </div>
 </div>
+
+<!-- Контейнер для динамического контента -->
+<div id="admin-content" class="mt-4"></div>
+
+<script>
+    function loadContent(url) {
+        fetch(url, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest' // Отмечаем запрос как AJAX
+            }
+        })
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('admin-content').innerHTML = html;
+        })
+        .catch(error => console.error('Ошибка загрузки:', error));
+    }
+</script>
 {% endblock %}

@@ -2,51 +2,56 @@
 {% load custom_filters %}
 
 {% block content %}
-<div class="d-flex justify-content-center align-items-center vh-100">
-    <div class="registration-form p-4 rounded shadow">
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card shadow-lg border-0" style="max-width: 500px; width: 100%;">
         <!-- Заголовок -->
-        <h2 class="text-center mb-4">Регистрация</h2>
+        <div class="card-header bg-dark text-white text-center">
+            <h3 class="mb-0">Регистрация</h3>
+        </div>
 
         <!-- Форма регистрации -->
-        <form method="post">
-            {% csrf_token %}
+        <div class="card-body p-4">
+            <form method="post">
+                {% csrf_token %}
 
-            <!-- Поле имени пользователя -->
-            <div class="form-group mb-3">
-                {{ form.username.label_tag }}
-                {{ form.username|add_class:"form-control rounded-pill" }}
-                <small class="form-text text-muted">{{ form.username.help_text }}</small>
-            </div>
+                <!-- Поле имени пользователя -->
+                <div class="form-group mb-3">
+                    {{ form.username.label_tag }}
+                    {{ form.username|add_class:"form-control rounded-pill" }}
+                    {% if form.username.help_text %}
+                        <small class="form-text text-muted">{{ form.username.help_text }}</small>
+                    {% endif %}
+                </div>
 
-            <!-- Поле пароля -->
-            <div class="form-group mb-3">
-                {{ form.password1.label_tag }}
-                {{ form.password1|add_class:"form-control rounded-pill" }}
-                <small class="form-text text-muted">{{ form.password1.help_text }}</small>
-            </div>
+                <!-- Поле электронной почты -->
+                <div class="form-group mb-3">
+                    {{ form.email.label_tag }}
+                    {{ form.email|add_class:"form-control rounded-pill" }}
+                </div>
 
-            <!-- Подтверждение пароля -->
-            <div class="form-group mb-3">
-                {{ form.password2.label_tag }}
-                {{ form.password2|add_class:"form-control rounded-pill" }}
-                <small class="form-text text-muted">{{ form.password2.help_text }}</small>
-            </div>
+                <!-- Поле пароля -->
+                <div class="form-group mb-3">
+                    {{ form.password1.label_tag }}
+                    {{ form.password1|add_class:"form-control rounded-pill" }}
+                </div>
 
-            <!-- Поле электронной почты -->
-            <div class="form-group mb-3">
-                {{ form.email.label_tag }}
-                {{ form.email|add_class:"form-control rounded-pill" }}
-                <small class="form-text text-muted">{{ form.email.help_text }}</small>
-            </div>
+                <!-- Подтверждение пароля -->
+                <div class="form-group mb-4">
+                    {{ form.password2.label_tag }}
+                    {{ form.password2|add_class:"form-control rounded-pill" }}
+                </div>
 
-            <!-- Кнопка регистрации -->
-            <button type="submit" class="btn btn-primary btn-block rounded-pill mb-3">Зарегистрироваться</button>
+                <!-- Кнопка регистрации -->
+                <button type="submit" class="btn btn-dark btn-block rounded-pill mb-3">Зарегистрироваться</button>
 
-            <!-- Ссылка для входа -->
-            <div class="text-center">
-                <p>Уже есть аккаунт? <a href="{% url 'Game_Territory:login' %}" class="text-primary">Войти</a></p>
-            </div>
-        </form>
+                <!-- Ссылка для входа -->
+                <div class="text-center">
+                    <p>Уже есть аккаунт? 
+                        <a href="{% url 'Game_Territory:login' %}" class="text-decoration-none">Войти</a>
+                    </p>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}

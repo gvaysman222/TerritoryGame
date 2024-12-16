@@ -1,38 +1,73 @@
 {% extends "Game_Territory/profile.html" %}
 
 {% block cabinet_content %}
-<h5>Мои заказы</h5>
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Дата</th>
-            <th>Статус</th>
-            <th>Сумма</th>
-            <th>Действия</th>
-        </tr>
-    </thead>
-    <tbody>
-       {% for order in orders %}
-<tr>
-    <td>{{ order.id }}</td>
-    <td>{{ order.date }}</td>
-    <td>{{ order.status }}</td>
-    <td>
-        {{ order.total_price }} руб.
-        <!-- Дополнительная отладка -->
-        <ul>
-            {% for item in order.items.all %}
-            <li>{{ item.product.name }}: {{ item.product.price }} x {{ item.quantity }}</li>
-            {% endfor %}
-        </ul>
-    </td>
-    <td>
-        <a href="{% url 'Game_Territory:order_detail' order.id %}" class="btn btn-sm btn-primary">Подробнее</a>
-    </td>
-</tr>
-{% endfor %}
+<div class="card shadow-sm">
+    <!-- Заголовок -->
+    <div class="card-header bg-dark text-white text-center">
+        <h5 class="mb-0">Мои заказы</h5>
+    </div>
 
-    </tbody>
-</table>
+    <!-- Содержимое -->
+    <div class="card-body">
+        {% if orders %}
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered align-middle text-center mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Дата</th>
+                            <th>Статус</th>
+                            <th>Сумма</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                            <tr>
+                                <!-- Номер заказа -->
+                                <td>{{ order.id }}</td>
+
+                                <!-- Дата заказа -->
+                                <td>{{ order.created_at|date:"d.m.Y H:i" }}</td>
+
+                                <!-- Статус заказа -->
+                                <td>
+                                    <span class="badge 
+                                        {% if order.status == 'pending' %}bg-warning
+                                        {% elif order.status == 'processed' %}bg-info
+                                        {% elif order.status == 'shipped' %}bg-primary
+                                        {% elif order.status == 'delivered' %}bg-success
+                                        {% else %}bg-secondary{% endif %}">
+                                        {{ order.get_status_display }}
+                                    </span>
+                                </td>
+
+                                <!-- Сумма заказа -->
+                                <td>
+                                    {{ order.total_price }} руб.
+                                    <ul class="list-unstyled small text-muted mt-2">
+                                        {% for item in order.items.all %}
+                                            <li>{{ item.product.name }}: {{ item.product.price|floatformat:2 }} x {{ item.quantity }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+
+                                <!-- Действия -->
+                                <td>
+                                    <a href="{% url 'Game_Territory:order_detail' order.id %}" 
+                                       class="btn btn-sm btn-dark">
+                                        Подробнее
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <!-- Если заказов нет -->
+            <p class="text-center text-muted mb-0">У вас пока нет заказов.</p>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}

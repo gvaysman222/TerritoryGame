@@ -1,84 +1,56 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="order-title">Детали заказа</h1>
-
-<style>
-    .order-container {
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        background-color: #f9f9f9;
-    }
-
-    .order-title {
-        text-align: center;
-        font-size: 2em;
-        color: #333;
-        margin-bottom: 20px;
-    }
-
-    .order-info p {
-        margin: 5px 0;
-        font-size: 1.1em;
-        color: #555;
-    }
-
-    .order-products {
-        margin-top: 20px;
-    }
-
-    .order-products h3 {
-        font-size: 1.5em;
-        margin-bottom: 10px;
-        color: #555;
-    }
-
-    .order-products ul {
-        list-style-type: none;
-        padding: 0;
-    }
-
-    .order-products li {
-        padding: 10px;
-        border-bottom: 1px solid #ccc;
-        font-size: 1em;
-    }
-
-    .order-products li:last-child {
-        border-bottom: none;
-    }
-
-    .order-total {
-        font-size: 1.2em;
-        font-weight: bold;
-        margin-top: 20px;
-        color: #333;
-        text-align: right;
-    }
-</style>
-
-<div class="order-container">
-    <!-- Информация о заказе -->
-    <div class="order-info">
-        <p><strong>Заказ №:</strong> {{ order.id }}</p>
-        <p><strong>Дата создания:</strong> {{ order.created_at }}</p>
-        <p><strong>Статус:</strong> {{ order.status }}</p>
+<div class="container mt-4 mb-5">
+    <!-- Заголовок -->
+    <div class="text-center mb-4">
+        <h1 class="display-5">Детали заказа №{{ order.id }}</h1>
     </div>
 
-    <!-- Товары в заказе -->
-    <div class="order-products">
-        <h3>Товары в заказе:</h3>
-        <ul>
-            {% for product in order.products.all %}
-                <li>{{ product.name }} - {{ product.price|floatformat:2 }} руб.</li>
-            {% endfor %}
-        </ul>
-    </div>
+    <!-- Карточка заказа -->
+    <div class="card shadow-lg border-0">
+        <div class="card-body">
+            <!-- Основная информация о заказе -->
+            <div class="mb-4">
+                <p><strong>Дата создания:</strong> {{ order.created_at|date:"d.m.Y H:i" }}</p>
+                <p><strong>Статус:</strong> 
+                    <span class="badge 
+                        {% if order.status == 'pending' %}bg-warning
+                        {% elif order.status == 'processed' %}bg-info
+                        {% elif order.status == 'shipped' %}bg-primary
+                        {% elif order.status == 'delivered' %}bg-success
+                        {% else %}bg-secondary{% endif %}">
+                        {{ order.get_status_display }}
+                    </span>
+                </p>
+            </div>
 
-    <!-- Итоговая информация -->
-    <p class="order-total">Итого: {{ order.products.all|length }} товаров</p>
+            <!-- Товары в заказе -->
+            <div class="order-products">
+                <h4 class="mb-3">Товары в заказе:</h4>
+                <ul class="list-group">
+                    {% for item in order.items.all %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>
+                                {{ item.product.name }} 
+                                <small class="text-muted">x {{ item.quantity }}</small>
+                            </span>
+                            <span>{{ item.total_price|floatformat:2 }} руб.</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Итоговая сумма -->
+            <div class="text-end mt-4">
+                <h5 class="fw-bold">Итоговая сумма: {{ order.total_price|floatformat:2 }} руб.</h5>
+            </div>
+        </div>
+
+        <!-- Кнопка Назад -->
+        <div class="card-footer text-center">
+            <a href="javascript:history.back()" class="btn btn-dark btn-lg">Назад</a>
+        </div>
+    </div>
 </div>
 {% endblock %}

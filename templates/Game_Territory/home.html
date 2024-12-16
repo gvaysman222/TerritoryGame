@@ -10,8 +10,8 @@
         <p>Ваш лучший выбор для настольных игр, варгеймов и других увлекательных развлечений!</p>
     </div>
 
-    <!-- Преимущества компании -->
-    <div class="company-advantages">
+    {# Преимущества компании #}
+    <div class="company-advantages test-center">
         <button id="toggle-btn" class="dropdown-btn">Наши преимущества</button>
         <div id="dropdown-content" class="dropdown-content">
             <ul>
@@ -24,7 +24,7 @@
         </div>
     </div>
 
-    <!-- Популярные товары -->
+    {# Популярные товары #}
     <div class="popular-products">
         <h2>Популярные товары</h2>
         <div class="products-container">
@@ -34,7 +34,7 @@
                     <div class="card-body">
                         <h5>{{ product.name }}</h5>
                         <p>{{ product.price|floatformat:2 }} руб.</p>
-                        <a href="{% url 'Game_Territory:product_detail' product.id %}" class="btn btn-primary">Подробнее</a>
+                        <a href="{% url 'Game_Territory:product_detail' product.id %}" class="btn btn-dark">Подробнее</a>
                     </div>
                 </div>
             {% endfor %}
@@ -53,63 +53,5 @@
         });
     });
 </script>
-
-<style>
-    .content-container {
-        min-height: 100vh; /* Минимальная высота, чтобы контент не залезал на футер */
-        display: flex;
-        flex-direction: column;
-    }
-
-    .dropdown-btn {
-        background-color: #494747;
-        color: white;
-        padding: 15px 20px;
-        font-size: 18px;
-        border: none;
-        cursor: pointer;
-        border-radius: 5px;
-        transition: background-color 0.3s ease;
-        width: 100%; /* Кнопка во всю ширину родителя */
-        box-sizing: border-box;
-    }
-
-    .dropdown-btn:hover {
-        background-color: #494747;
-    }
-
-    .company-advantages {
-        position: relative;
-        width: 100%;
-        margin-bottom: 20px; /* Добавлен отступ */
-    }
-
-    .dropdown-content {
-        display: none;
-        position: relative;
-        width: 100%;
-        background-color: #f9f9f9;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        padding: 20px;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-        box-sizing: border-box;
-        z-index: 1;
-    }
-
-    .dropdown-content ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .dropdown-content li {
-        padding: 8px 0;
-    }
-
-    .popular-products {
-        margin-top: 20px;
-    }
-</style>
 
 {% endblock %}

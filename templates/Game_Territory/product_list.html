@@ -1,11 +1,18 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-{#<div class="container mt-5">#}
+<div class="catalog-container">
     <h2 class="text-center mb-4">Каталог товаров</h2>
-    <div class="card-list">
+
+    <!-- Форма поиска -->
+    <div class="search-bar mb-4 text-center">
+        <input type="text" id="search-input" class="form-control" placeholder="Поиск по названию..." style="max-width: 400px; margin: 0 auto;">
+    </div>
+
+    <!-- Контейнер для продуктов -->
+    <div id="products-container" class="products-container">
         {% for product in products %}
-            <div class="card">
+            <div class="product-card">
                 <!-- Изображение товара -->
                 {% if product.image_url %}
                     <img src="{{ product.image_url }}" alt="{{ product.name }}">
@@ -21,14 +28,38 @@
                 </div>
 
                 <!-- Кнопки действий -->
-                <div class="d-flex flex-column align-items-end">
-                    <a href="{% url 'Game_Territory:product_detail' product.id %}" class="btn btn-primary mb-2">Подробнее</a>
-                    <a href="{% url 'Game_Territory:add_to_cart' product.id %}" class="btn btn-outline-primary">В корзину</a>
+                <div class="card-buttons">
+                    <a href="{% url 'Game_Territory:product_detail' product.id %}" class="btn btn-dark">Подробнее</a>
+                    <a href="{% url 'Game_Territory:add_to_cart' product.id %}" class="btn btn-outline-dark">В корзину</a>
                 </div>
             </div>
         {% empty %}
             <p class="text-center">Товары не найдены.</p>
         {% endfor %}
     </div>
-{#</div>#}
+</div>
+
+<!-- AJAX-скрипт для поиска -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const searchInput = document.getElementById("search-input");
+        const productsContainer = document.getElementById("products-container");
+
+        searchInput.addEventListener("input", () => {
+            const query = searchInput.value;
+
+            fetch(`/catalog/search/?q=${query}`, {
+                method: "GET",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                },
+            })
+            .then(response => response.text())
+            .then(html => {
+                productsContainer.innerHTML = html;
+            })
+            .catch(error => console.error("Ошибка:", error));
+        });
+    });
+</script>
 {% endblock %}

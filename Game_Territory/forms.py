@@ -17,7 +17,7 @@ class ProductForm(forms.ModelForm):
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = ['delivery_method', 'address']
+        fields = ['full_name', 'phone', 'address', 'comment']
 
 class ProfileForm(forms.ModelForm):
     class Meta:
