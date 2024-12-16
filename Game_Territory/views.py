@@ -473,7 +473,7 @@ def product_update(request, pk):
         form = ProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
             form.save()
-            return redirect('Game_Territory:manage_products')
+            return redirect('Game_Territory:admin_panel')
     else:
         form = ProductForm(instance=product)
     return render(request, 'Game_Territory/product_form.html', {'form': form})
