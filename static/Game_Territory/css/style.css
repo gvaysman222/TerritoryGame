@@ -1,19 +1,20 @@
 /* Общие стили */
 body, html {
     margin: 0;
-    padding: 0;
+    /*padding: 0;*/
     width: 100%;
     height: 100%;
     overflow-x: hidden;
     background: url("/static/Game_Territory/images/background.webp") center/cover fixed no-repeat;
     display: flex;
     flex-direction: column;
+    padding-top: 9px;
 }
 
 /* Общий контейнер для контента */
 .container {
     margin: 0 auto;
-    margin-top: 40px; /* Учитываем высоту navbar */
+    margin-top: 0; /* Учитываем высоту navbar */
     max-width: 1200px;
     padding: 20px;
     background: rgba(255, 255, 255, 0.8);
@@ -25,47 +26,49 @@ body, html {
 
 /* Навигационная панель */
 .custom-navbar {
-    background: transparent;
+    background: transparent; /* Полупрозрачный фон */
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100%; /* Занимает всю ширину */
     z-index: 1000;
-    margin: 0;
-    border-radius: 0;
-    padding: 0; /* Убираем лишние отступы */
-    box-shadow: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-bottom: none;
+    box-sizing: border-box;
 }
 
-/* Центрируем контейнер внутри navbar */
+/* Центрирование контейнера внутри navbar */
 .custom-navbar .container {
     max-width: 1200px;
-    margin: 0 auto; /* Центрирование по горизонтали */
+    margin: 0 auto;
     display: flex;
-    justify-content: space-between; /* Разделяем элементы */
-    align-items: center; /* Выравнивание по вертикали */
-    padding: 10px 20px; /* Внутренние отступы */
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px; /* Универсальный padding для всех разрешений */
     box-sizing: border-box;
-    margin-left: 135px;
 }
 
-/* Корректируем ссылки в navbar */
+/* Корректируем ссылки */
 .custom-navbar .nav-link {
     color: #333;
     font-weight: bold;
     text-decoration: none;
-    transition: color 0.3s ease;
+    padding: 10px 15px; /* Область клика */
+    transition: color 0.3s ease, background-color 0.3s ease;
 }
 
 .custom-navbar .nav-link:hover {
     color: #ff6600;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
 }
 
 /* Убираем отступ сверху у контента */
 .main-content {
-    margin-top: 70px; /* Создаём отступ под navbar */
-    padding: 20px;
+    margin-top: 0; /* Учитываем высоту навигационной панели */
+    padding-top: 20px;
 }
+
 
 
 
@@ -113,13 +116,24 @@ body, html {
     background-color: #555; /* Светлее при наведении */
 }
 
+.dropdown-wrapper {
+    display: inline-block; /* Гарантирует, что блок занимает ширину кнопки */
+    text-align: center;
+}
+
+/* Стили для содержимого */
 .dropdown-content {
-    display: none;
-    padding: 15px;
+    display: block;
+    max-height: 0; /* Изначально скрыт */
+    overflow: hidden;
+    margin-top: 10px; /* Отступ сверху под кнопкой */
+    padding: 0 15px;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 5px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: max-height 0.5s ease; /* Плавное раскрытие */
+    text-align: left;
 }
 
 /* Популярные товары */

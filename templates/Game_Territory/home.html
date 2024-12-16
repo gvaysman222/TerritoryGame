@@ -12,15 +12,17 @@
 
     <!-- Преимущества компании -->
     <div class="company-advantages text-center">
-        <button id="toggle-btn" class="dropdown-btn">Наши преимущества</button>
-        <div id="dropdown-content" class="dropdown-content">
-            <ul>
-                <li>Широкий ассортимент настольных игр на любой вкус</li>
-                <li>Только качественная продукция от проверенных производителей</li>
-                <li>Удобные способы оплаты и доставки</li>
-                <li>Регулярные акции и скидки для постоянных клиентов</li>
-                <li>Профессиональная поддержка и консультации по выбору игр</li>
-            </ul>
+        <div class="dropdown-wrapper">
+            <button id="toggle-btn" class="dropdown-btn">Наши преимущества</button>
+            <div id="dropdown-content" class="dropdown-content">
+                <ul>
+                    <li>Широкий ассортимент настольных игр на любой вкус</li>
+                    <li>Только качественная продукция от проверенных производителей</li>
+                    <li>Удобные способы оплаты и доставки</li>
+                    <li>Регулярные акции и скидки для постоянных клиентов</li>
+                    <li>Профессиональная поддержка и консультации по выбору игр</li>
+                </ul>
+            </div>
         </div>
     </div>
 
@@ -48,8 +50,11 @@
         const dropdownContent = document.getElementById("dropdown-content");
 
         toggleBtn.addEventListener("click", () => {
-            dropdownContent.style.display =
-                dropdownContent.style.display === "block" ? "none" : "block";
+            if (dropdownContent.style.maxHeight) {
+                dropdownContent.style.maxHeight = null; // Сворачиваем блок
+            } else {
+                dropdownContent.style.maxHeight = dropdownContent.scrollHeight + "px"; // Раскрываем блок
+            }
         });
     });
 </script>
